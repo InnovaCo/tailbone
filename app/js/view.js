@@ -17,6 +17,7 @@
     },
     destroy: function() {
       this.parent = null;
+      this.undelegateEvents();
       this.children.destroy();
       this.trigger('destroyed', this);
       return this;
