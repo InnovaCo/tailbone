@@ -331,7 +331,7 @@
     var _this = this;
     this.nestedViewWithHoles.render();
     return this.nestedViewWithHoles.on('ready', function() {
-      equal(_this.nestedViewWithHoles.$el.html(), '===Content===<div id="frontPageMovies" class="">===Frontpage movies===<div id="pagination" class="otherPlaceholder"></div></div>', 'Вытаскиваем partial из "дырки"');
+      equal(_this.nestedViewWithHoles.$el.html(), '===Content===<div id="frontPageMovies" class="bPartial">===Frontpage movies===<div id="pagination" class="otherPlaceholder"></div></div>', 'Вытаскиваем partial из "дырки"');
       return start();
     });
   });

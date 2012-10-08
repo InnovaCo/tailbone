@@ -153,6 +153,7 @@ Inn.View = Backbone.View.extend({
     $ctx.removeClass @options.partialClassName
     view = new Inn.View _.extend {}, config, { el: $ctx.get(0), id: $ctx.attr('id') }, $ctx.data('view-options')
     view._parent = @
+    view.$el.addClass @options.partialClassName # Оставляем напоминание, что это partial
     @children.add view unless silent
     return view
 

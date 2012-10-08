@@ -316,7 +316,7 @@ asyncTest 'Ability to find holes in template', 1, ->
   @nestedViewWithHoles.render()
 
   @nestedViewWithHoles.on 'ready', =>
-    equal @nestedViewWithHoles.$el.html(), '===Content===<div id="frontPageMovies" class="">===Frontpage movies===<div id="pagination" class="otherPlaceholder"></div></div>', 'Вытаскиваем partial из "дырки"'
+    equal @nestedViewWithHoles.$el.html(), '===Content===<div id="frontPageMovies" class="bPartial">===Frontpage movies===<div id="pagination" class="otherPlaceholder"></div></div>', 'Вытаскиваем partial из "дырки"'
     start()
 
 asyncTest 'View may have attribute foo, with "bar" in value', 1, ->

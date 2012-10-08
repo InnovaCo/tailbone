@@ -107,6 +107,7 @@
         id: $ctx.attr('id')
       }, $ctx.data('view-options')));
       view._parent = this;
+      view.$el.addClass(this.options.partialClassName);
       if (!silent) {
         this.children.add(view);
       }
