@@ -20,6 +20,7 @@
       this.undelegateEvents();
       this.children.destroy();
       this.trigger('destroyed', this);
+      this.off("ready");
       return this;
     },
     render: function(skipChildren, replaceContext) {

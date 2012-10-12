@@ -61,10 +61,11 @@ Inn.View = Backbone.View.extend({
     @children.destroy()
     # Генерируем событие destroyed
     @trigger 'destroyed', @
+    @off "ready"
 
     return @
 
-
+    
   ##### render(skipChildren)
   #
   #---
