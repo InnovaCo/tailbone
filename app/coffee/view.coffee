@@ -282,6 +282,74 @@ Inn.View = Backbone.View.extend({
   isRoot: ->
     return @_parent is null
 
+  # Заменяем только один конкретный partial
+  replacePartial: (oldID, newType) ->
+    # Проверяем, есть ли вообще "дырка", которую надо заменять.
+    oldPartial = @children.get(oldID)
+    return false unless oldPartial
+
+    _this = @
+    # Проверяем, загружен ли вообще новый View,
+    # и подгружаем, если нет.
+    require [newType], (newPartialClass) =>
+      newPartial = new newPartialClass
+        model: _this.options.model
+        l4g: _this.options.l4g
+        moduleNotify: _this.options.moduleNotify
+
+      newPartial.on "ready", =>
+        _this.replacePartialFinishStep.call(_this, oldID, newPartial)
+
+      newPartial.$el
+        .attr("id", newPartial.options.id)
+        .attr("data-view-template", newPartial.options.templateName)
+        .data("view-template", newPartial.options.templateName)
+        .addClass("bPartial")
+
+      newPartial.render()
+
+    return @  # поддерживаем chainable
+
+  replacePartialFinishStep: (oldID, newPartial) ->
+    # ОЧЕНЬ ВАЖНО! За это время "дырка" могла измениться, берем заново.
+    oldPartial = @children.get(oldID)
+    return false if not oldPartial
+
+    newPartial.$el.replaceAll oldPartial.$el
+
+    @children.remove oldPartial
+    @children.add newPartial
+
+    oldPartial.destroy()
+    oldPartial = null
+    newPartial.off "ready"
+
+    # FIXME move out this hack
+    if newPartial.id isnt "bGamePanel__settings"
+      $( document ).trigger "game-panel-rendered"
+    return @
+
+  # У нас на входе есть только шаблон. (ну не нужно нам ничего специального, например)
+  # В таком случае создаем под него дефолтное view.
+  #
+  _replaceTemplate: (oldID, newTemplateName) ->
+    # Проверяем, есть ли вообще дырка, которую надо заменять.
+    oldPartial = @children.get(oldID)
+    return false unless oldPartial
+
+    newView = new Inn.View _.extend {}, oldPartial.options,
+      templateName: newTemplateName
+
+    newView.on "ready", =>
+      _this.replacePartialFinishStep.call(_this, oldID, newView)
+
+    newView.$el
+      .attr("data-view-template", newView.options.templateName)
+      .data("view-template", newView.options.templateName)
+      .addClass("bPartial")
+    newView.render()
+
+    return @
 
   ##### options
   #
